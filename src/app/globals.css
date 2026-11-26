@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
+/* Dark mode follows the `data-theme` attribute on <html> (set by the theme script). */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Design tokens — see docs/design.md. Raw values live in CSS variables so both themes
+   share one set of Tailwind utilities (bg-paper, text-ink, …). */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --paper: #f1f3f6;
+  --surface: #ffffff;
+  --ink: #0d0f1c;
+  --body: #3b4152;
+  --muted: #5b6274;
+  --cobalt: #3341d1;
+  --signal: #0b7a52;
+  --rule: #dce0e8;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --paper: #0d0f1c;
+  --surface: #151829;
+  --ink: #eceef6;
+  --body: #c2c7d8;
+  --muted: #8e95ac;
+  --cobalt: #8e9bff;
+  --signal: #45d49a;
+  --rule: #23273b;
+  color-scheme: dark;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-paper: var(--paper);
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-body: var(--body);
+  --color-muted: var(--muted);
+  --color-cobalt: var(--cobalt);
+  --color-signal: var(--signal);
+  --color-rule: var(--rule);
+
+  --font-sans: var(--font-instrument), ui-sans-serif, system-ui, sans-serif;
+
+  /* Width of the waterfall's label track; reused by every section so the page shares one spine. */
+  --spacing-label: 13rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Keep anchored sections clear of the sticky header. */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-paper font-sans text-body antialiased;
+    font-size: 1.0625rem;
+    line-height: 1.65;
+  }
+
+  :focus-visible {
+    @apply rounded-sm outline-2 outline-offset-2 outline-cobalt;
+  }
+
+  ::selection {
+    @apply bg-cobalt text-paper;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@utility font-display {
+  /* Condensed voice of Instrument Sans for the name and section headings. */
+  font-stretch: 75%;
+  font-variation-settings: "wdth" 75;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+/* Waterfall bars: the page's single orchestrated motion — bars draw in like requests resolving. */
+@keyframes bar-draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@utility bar-draw {
+  transform-origin: left center;
+  animation: bar-draw 520ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  animation-delay: var(--bar-delay, 0ms);
+}
+
+/* The ongoing role ends in an arrow: still loading. */
+@utility bar-ongoing {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 0.5rem) 0,
+    100% 50%,
+    calc(100% - 0.5rem) 100%,
+    0 100%
+  );
+  border-radius: 2px 0 0 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
