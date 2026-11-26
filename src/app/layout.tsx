@@ -1,38 +1,58 @@
-import type { Metadata } from "next";
-import { Instrument_Sans } from "next/font/google";
-import { SiteHeader } from "@/components/SiteHeader";
-import { themeScript } from "@/components/ThemeToggle";
-import { profile } from "@/content/profile";
+import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono, Unbounded } from "next/font/google";
+import { profile, siteUrl } from "@/content/profile";
 import "./globals.css";
 
-// Variable font with the width axis: one file gives both the condensed display voice and body text.
-const instrumentSans = Instrument_Sans({
+const unbounded = Unbounded({
   subsets: ["latin"],
-  axes: ["wdth"],
-  variable: "--font-instrument",
+  weight: ["500", "600", "700", "800"],
+  variable: "--font-unbounded",
+  display: "swap",
+});
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-inter",
+  display: "swap",
+});
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-mono",
   display: "swap",
 });
 
+const title = `${profile.name}, ${profile.role}`;
+
 export const metadata: Metadata = {
-  title: `${profile.name}, ${profile.role}`,
+  metadataBase: new URL(siteUrl),
+  title,
   description: profile.tagline,
+  alternates: { canonical: "/" },
+  authors: [{ name: profile.name, url: siteUrl }],
+  openGraph: {
+    type: "profile",
+    url: "/",
+    siteName: profile.name,
+    title,
+    description: profile.tagline,
+    locale: "en_US",
+  },
+  twitter: { card: "summary_large_image", title, description: profile.tagline },
 };
+
+export const viewport: Viewport = { themeColor: "#0c0b0b", colorScheme: "dark" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    // data-theme is set by themeScript before hydration, so React must not complain about it.
-    <html lang="en" className={instrumentSans.variable} suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-      </head>
+    <html
+      lang="en"
+      className={`${unbounded.variable} ${inter.variable} ${mono.variable}`}
+    >
       <body>
-        <a
-          href="#top"
-          className="sr-only z-20 rounded-sm bg-cobalt px-4 py-2 text-paper focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
-        >
+        <a className="skip" href="#top">
           Skip to content
         </a>
-        <SiteHeader />
         {children}
       </body>
     </html>
