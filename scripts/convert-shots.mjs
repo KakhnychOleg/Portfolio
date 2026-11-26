@@ -9,10 +9,27 @@ const OUT = path.resolve("public/shots");
 
 // Live projects with a screenshot (keep in sync with src/content/projects.ts).
 const LIVE = [
-  "solodesk", "ledgerpeek", "novasnap", "ezblockchain", "poldingroup", "aviaoil", "ucoil",
-  "nvatransportation", "clevertransco", "allistrade", "newenergy", "saunazeder",
-  "burocreativelab", "philly", "brillant", "venusmed", "vyturio", "picklinika", "safarmes",
-  "overwatchclan", "mirkas",
+  "solodesk",
+  "ledgerpeek",
+  "novasnap",
+  "ezblockchain",
+  "poldingroup",
+  "aviaoil",
+  "ucoil",
+  "nvatransportation",
+  "clevertransco",
+  "allistrade",
+  "newenergy",
+  "saunazeder",
+  "burocreativelab",
+  "philly",
+  "brillant",
+  "venusmed",
+  "vyturio",
+  "picklinika",
+  "safarmes",
+  "overwatchclan",
+  "mirkas",
 ];
 const FEATURED = ["solodesk"];
 
@@ -36,6 +53,8 @@ for (const [slug, kind, width, quality] of jobs) {
     .webp({ quality, effort: 6 })
     .toFile(dest);
   total += (await stat(dest)).size;
-  console.log(`${path.basename(dest)}  ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)} KB`);
+  console.log(
+    `${path.basename(dest)}  ${info.width}x${info.height}  ${(info.size / 1024).toFixed(0)} KB`,
+  );
 }
 console.log(`${jobs.length} files, ${(total / 1024 / 1024).toFixed(2)} MB`);
