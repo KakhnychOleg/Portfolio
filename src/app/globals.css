@@ -177,9 +177,9 @@ body::before {
   border-radius: 50%;
   background: var(--accent);
   box-shadow: 0 0 0 0 var(--accent);
-  animation: ping 2.4s infinite;
+  animation: beacon 2.4s infinite;
 }
-@keyframes ping {
+@keyframes beacon {
   70% {
     box-shadow: 0 0 0 7px transparent;
   }
