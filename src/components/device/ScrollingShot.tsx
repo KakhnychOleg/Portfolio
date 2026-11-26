@@ -17,7 +17,27 @@ interface Props {
  */
 export function ScrollingShot({ src, width, height, sizes, name }: Props) {
   const ref = useRef<HTMLImageElement>(null);
+  const anchor = useRef<HTMLSpanElement>(null);
   const [failed, setFailed] = useState(false);
+  // Mount the (large) screenshot only when the scene is about a screen away, so it never
+  // competes with the hero for bandwidth. Native lazy loading starts far too early here.
+  const [near, setNear] = useState(false);
+
+  useEffect(() => {
+    const el = anchor.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "100% 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
 
   const measure = useCallback(() => {
     const img = ref.current;
@@ -35,9 +55,10 @@ export function ScrollingShot({ src, width, height, sizes, name }: Props) {
     const ro = new ResizeObserver(measure);
     ro.observe(frame);
     return () => ro.disconnect();
-  }, [measure]);
+  }, [measure, near]);
 
   if (failed) return <div className="placeholder">{name}</div>;
+  if (!near) return <span ref={anchor} aria-hidden="true" />;
   return (
     <Image
       ref={ref}

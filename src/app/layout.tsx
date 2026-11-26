@@ -3,23 +3,23 @@ import { Inter, JetBrains_Mono, Unbounded } from "next/font/google";
 import { profile, siteUrl } from "@/content/profile";
 import "./globals.css";
 
+// Variable fonts: one file per family covers every weight the design uses.
 const unbounded = Unbounded({
   subsets: ["latin"],
-  weight: ["500", "600", "700", "800"],
   variable: "--font-unbounded",
   display: "swap",
 });
 const inter = Inter({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
   variable: "--font-inter",
   display: "swap",
 });
 const mono = JetBrains_Mono({
   subsets: ["latin"],
-  weight: ["400", "500"],
   variable: "--font-mono",
   display: "swap",
+  // Only small labels use the mono face; it should not compete with the hero font.
+  preload: false,
 });
 
 const title = `${profile.name}, ${profile.role}`;
