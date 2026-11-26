@@ -7,7 +7,9 @@ test.describe("portfolio", () => {
     page.on("pageerror", (e) => errors.push(e.message));
     page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
     await page.goto("/");
-    await expect(page.getByRole("heading", { level: 1, name: "Oleh Kakhnych" })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { level: 1, name: "Oleh Kakhnych" }),
+    ).toBeVisible();
     // Walk the page so lazy images and scroll effects run.
     const height = await page.evaluate(() => document.documentElement.scrollHeight);
     for (let y = 0; y < height; y += 600) await page.evaluate((y) => scrollTo(0, y), y);
