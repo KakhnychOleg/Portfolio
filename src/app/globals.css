@@ -792,7 +792,8 @@ a.rl:hover .row-dom,
 a.rl:focus-visible .row-cat,
 a.rl:focus-visible .row-sum,
 a.rl:focus-visible .row-dom {
-  color: var(--bone);
+  /* Pure white keeps small text at AA (4.7:1) on the red fill; bone would be 3.9:1. */
+  color: #fff;
 }
 .row-dom {
   text-align: right;
