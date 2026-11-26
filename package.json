@@ -11,7 +11,10 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "shots": "node scripts/convert-shots.mjs",
+    "test:e2e": "playwright test",
+    "contrast": "node scripts/check-contrast.mjs"
   },
   "dependencies": {
     "next": "16.4.6",
