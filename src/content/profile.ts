@@ -1,24 +1,23 @@
-import type { SocialLink } from "./types";
-
 export const profile = {
   name: "Oleh Kakhnych",
   role: "Full-Stack Web Engineer",
   tagline:
     "Full-Stack Web Engineer with 5+ years of experience building React and TypeScript apps, headless CMS platforms, and fast, high-converting websites for international teams.",
+  lead: "Full-Stack Web Engineer. I build React and TypeScript products that load fast and get found.",
+  location: "Ukraine, remote",
+  timeZone: "Europe/Kyiv",
   email: "kakhnych.oleg@gmail.com",
-  location: "Ukraine, working remotely",
-  languages: ["Ukrainian (native)", "Russian (native)", "English (B2)", "Polish (A2)"],
+  resume: "/Oleh_Kakhnych_CV_Full-Stack.pdf",
+  status: "Open to remote roles",
+  links: [
+    { label: "LinkedIn", href: "https://www.linkedin.com/in/oleg-kakhnych/" },
+    { label: "GitHub", href: "https://github.com/KakhnychOleg" },
+    { label: "Telegram", href: "https://t.me/okay1301" },
+  ],
 } as const;
 
-export const socialLinks: SocialLink[] = [
-  { label: "Email", href: `mailto:${profile.email}` },
-  { label: "LinkedIn", href: "https://www.linkedin.com/in/oleg-kakhnych/" },
-  { label: "GitHub", href: "https://github.com/KakhnychOleg" },
-  { label: "Telegram", href: "https://t.me/okay1301" },
-];
+/** Words wrapped in *asterisks* are drawn in the accent colour. */
+export const statement =
+  "I build fast React and TypeScript products, then make them *easy* *to* *find*: for search engines and for AI assistants. Five years, more than forty websites, teams in Switzerland, the USA and Ukraine.";
 
-export const about: string[] = [
-  "I build React and TypeScript products end to end: architecture, component libraries, performance and the SEO work that gets them found. Right now I own the frontend of a product used by 3,000+ monthly active users across Switzerland.",
-  "I care about the parts users feel without noticing: pages that load fast, and content that search engines and AI assistants can actually understand.",
-  "Over five years I have worked remotely with teams in Switzerland, the USA and Ukraine, from pixel-perfect agency builds to owning a product's frontend architecture.",
-];
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kakhnych.vercel.app";
