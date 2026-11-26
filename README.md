@@ -1,36 +1,67 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Oleh Kakhnych — portfolio
 
-## Getting Started
+Personal site of a Full-Stack Web Engineer (React, TypeScript). One page: hero with live Kyiv
+time and this page's real LCP, a scroll-driven SoloDesk scene, every live project with filters
+and a cursor preview, earlier work, experience and contact.
 
-First, run the development server:
+**Live:** _coming soon (Vercel)_
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+![CI](https://github.com/KakhnychOleg/Portfolio/actions/workflows/ci.yml/badge.svg)
+
+| Desktop                                  | Mobile                                 |
+| ---------------------------------------- | -------------------------------------- |
+| ![Desktop](docs/screenshots/desktop.png) | ![Mobile](docs/screenshots/mobile.png) |
+
+![Featured scene](docs/screenshots/featured.png)
+
+## Stack
+
+- Next.js 16 (App Router, Cache Components, Turbopack), React 19, TypeScript (strict)
+- Tailwind CSS v4 tooling with hand-written CSS for the design (no Preflight)
+- `next/font` (Unbounded, Inter, JetBrains Mono), `next/image` (AVIF/WebP)
+- Metadata API, generated Open Graph image, `sitemap.xml`, `robots.txt`, JSON-LD `Person`
+- Vitest + React Testing Library, Playwright + axe, Lighthouse CI, GitHub Actions
+
+## How it is built
+
+- Server Components by default. Client code only where the page reacts to time, scroll or
+  input: `LocalTime`, `LiveLcp`, the scene shell, the project list and its cursor preview.
+- Content is typed data in `src/content/*.ts`; logic that can be tested lives in `src/lib`.
+- The featured scene writes its progress into CSS variables (`--open`, `--on`, `--scroll`) from
+  one passive scroll listener and at most one `requestAnimationFrame` per frame. CSS does the
+  rest with transforms and opacity. With reduced motion the scene shows its final state.
+- The laptop keyboard is an SVG generated in perspective (`src/lib/laptop-base.ts`).
+
+```
+src/
+  app/          layout, page, globals.css, opengraph-image, sitemap, robots
+  components/   Header, sections/*, device/*, ui/*
+  content/      profile, projects, experience, testimonials, types
+  hooks/        useScrollProgress
+  lib/          projects (filters, paging, grouping), laptop-base, json-ld
+scripts/        convert-shots.mjs, check-contrast.mjs
+e2e/            Playwright specs
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Run
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm ci
+npm run dev        # http://localhost:3000
+npm run build && npm start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Screenshots are served from `public/shots/*.webp`. To regenerate them from the source JPEGs:
+`npm run shots -- path/to/jpegs`.
 
-## Learn More
+## Test
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run lint
+npm run typecheck
+npm test           # unit and component tests (Vitest)
+npm run contrast   # WCAG contrast of every text colour pair
+npm run test:e2e   # Playwright at 1440 and 390 px, axe smoke test (builds and starts the app)
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+CI runs all of the above plus Lighthouse CI with a 95+ budget on every category.
