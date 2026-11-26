@@ -335,8 +335,10 @@ body::before {
   letter-spacing: -0.03em;
   max-width: 26ch;
 }
+/* Unlit words sit at 40% so even the "off" state keeps 3:1 for large text (AA).
+   Accent words start in bone and turn red as they light up. */
 .statement .w {
-  opacity: 0.14;
+  opacity: 0.4;
   transition: opacity 0.2s;
 }
 .statement .w.red {
@@ -348,6 +350,10 @@ body::before {
     animation-timeline: view();
     animation-range: cover 18% cover 42%;
   }
+  .statement .w.red {
+    color: var(--bone);
+    animation-name: lit-red;
+  }
 }
 /* Without scroll-driven animations the words are simply lit. */
 @supports not (animation-timeline: view()) {
@@ -358,6 +364,12 @@ body::before {
 @keyframes lit {
   to {
     opacity: 1;
+  }
+}
+@keyframes lit-red {
+  to {
+    opacity: 1;
+    color: var(--accent-ink);
   }
 }
 
@@ -1052,6 +1064,9 @@ a.rl:focus-visible .row-dom {
   }
   .statement .w {
     opacity: 1;
+  }
+  .statement .w.red {
+    color: var(--accent-ink);
   }
   html {
     scroll-behavior: auto;
